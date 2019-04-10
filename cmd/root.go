@@ -29,6 +29,7 @@ var (
 	flagDarkOpinions   string
 	flagOutputFormat   string
 	flagMetrics        string
+	flagReleaseBuild   bool
 
 	// workPath* variables contain paths derived from flagWorkDir
 	workPathCompilationDir string
@@ -165,6 +166,13 @@ func init() {
 		"Choose output format, one of human, json, or yaml (currently only for 'show properties')",
 	)
 
+	buildImagesCmd.PersistentFlags().BoolP(
+		"release-build",
+		"R",
+		false,
+		"Indicates final release build (all roles tagged as \"dev-only\" will be omitted)",
+	)
+
 	viper.BindPFlags(RootCmd.PersistentFlags())
 }
 
@@ -230,6 +238,7 @@ func validateBasicFlags() error {
 	flagDarkOpinions = viper.GetString("dark-opinions")
 	flagOutputFormat = viper.GetString("output")
 	flagMetrics = viper.GetString("metrics")
+	flagReleaseBuild = viper.GetBool("release-build")
 
 	extendPathsFromWorkDirectory()
 

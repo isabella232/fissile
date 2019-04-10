@@ -41,6 +41,7 @@ compiled once.
 			flagRoleManifest,
 			flagMetrics,
 			flagWorkers,
+			flagReleaseBuild,
 		)
 	},
 }

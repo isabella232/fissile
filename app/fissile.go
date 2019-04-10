@@ -297,7 +297,7 @@ func (f *Fissile) collectProperties() map[string]map[string]map[string]interface
 }
 
 // Compile will compile a list of dev BOSH releases
-func (f *Fissile) Compile(repository, targetPath, roleManifestPath, metricsPath string, workerCount int) error {
+func (f *Fissile) Compile(repository, targetPath, roleManifestPath, metricsPath string, workerCount int, skipDev bool) error {
 	if len(f.releases) == 0 {
 		return fmt.Errorf("Releases not loaded")
 	}
@@ -312,7 +312,7 @@ func (f *Fissile) Compile(repository, targetPath, roleManifestPath, metricsPath 
 		return fmt.Errorf("Error connecting to docker: %s", err.Error())
 	}
 
-	roleManifest, err := model.LoadRoleManifest(roleManifestPath, f.releases)
+	roleManifest, err := model.LoadRoleManifest(roleManifestPath, f.releases, skipDev)
 	if err != nil {
 		return fmt.Errorf("Error loading roles manifest: %s", err.Error())
 	}
@@ -444,7 +444,7 @@ func (f *Fissile) GeneratePackagesRoleImage(repository string, roleManifest *mod
 }
 
 // GenerateRoleImages generates all role images using dev releases
-func (f *Fissile) GenerateRoleImages(targetPath, repository, metricsPath string, noBuild, force bool, workerCount int, rolesManifestPath, compiledPackagesPath, lightManifestPath, darkManifestPath string) error {
+func (f *Fissile) GenerateRoleImages(targetPath, repository, metricsPath string, noBuild, force bool, workerCount int, rolesManifestPath, compiledPackagesPath, lightManifestPath, darkManifestPath string, skipDev bool) error {
 	if len(f.releases) == 0 {
 		return fmt.Errorf("Releases not loaded")
 	}
@@ -454,7 +454,7 @@ func (f *Fissile) GenerateRoleImages(targetPath, repository, metricsPath string,
 		defer stampy.Stamp(metricsPath, "fissile", "create-role-images", "done")
 	}
 
-	roleManifest, err := model.LoadRoleManifest(rolesManifestPath, f.releases)
+	roleManifest, err := model.LoadRoleManifest(rolesManifestPath, f.releases, skipDev)
 	if err != nil {
 		return fmt.Errorf("Error loading roles manifest: %s", err.Error())
 	}
@@ -500,7 +500,7 @@ func (f *Fissile) GenerateRoleImages(targetPath, repository, metricsPath string,
 }
 
 // ListRoleImages lists all dev role images
-func (f *Fissile) ListRoleImages(repository string, rolesManifestPath string, existingOnDocker, withVirtualSize bool) error {
+func (f *Fissile) ListRoleImages(repository string, rolesManifestPath string, existingOnDocker, withVirtualSize bool, skipDev bool) error {
 	if withVirtualSize && !existingOnDocker {
 		return fmt.Errorf("Cannot list image virtual sizes if not matching image names with docker")
 	}
@@ -519,7 +519,7 @@ func (f *Fissile) ListRoleImages(repository string, rolesManifestPath string, ex
 		}
 	}
 
-	rolesManifest, err := model.LoadRoleManifest(rolesManifestPath, f.releases)
+	rolesManifest, err := model.LoadRoleManifest(rolesManifestPath, f.releases, skipDev)
 	if err != nil {
 		return fmt.Errorf("Error loading roles manifest: %s", err.Error())
 	}
@@ -718,9 +718,9 @@ func compareHashes(v1Hash, v2Hash keyHash) *HashDiffs {
 
 // GenerateKube will create a set of configuration files suitable for deployment
 // on Kubernetes
-func (f *Fissile) GenerateKube(rolesManifestPath, outputDir, repository, registry, organization string, defaultFiles []string, useMemoryLimits bool) error {
+func (f *Fissile) GenerateKube(rolesManifestPath, outputDir, repository, registry, organization string, defaultFiles []string, useMemoryLimits bool, skipDev bool) error {
 
-	rolesManifest, err := model.LoadRoleManifest(rolesManifestPath, f.releases)
+	rolesManifest, err := model.LoadRoleManifest(rolesManifestPath, f.releases, skipDev)
 	if err != nil {
 		return fmt.Errorf("Error loading roles manifest: %s", err.Error())
 	}

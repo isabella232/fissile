@@ -67,6 +67,7 @@ from other specs.  At most one is allowed.  Its syntax is --patch-properties-rel
 			workPathCompilationDir,
 			flagLightOpinions,
 			flagDarkOpinions,
+			flagReleaseBuild,
 		)
 	},
 }

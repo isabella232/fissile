@@ -43,7 +43,7 @@ func TestRoleVariables(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/tor-good.yml")
-	rolesManifest, err := LoadRoleManifest(roleManifestPath, []*Release{release})
+	rolesManifest, err := LoadRoleManifest(roleManifestPath, []*Release{release}, false)
 	assert.NoError(err)
 	assert.NotNil(rolesManifest)
 

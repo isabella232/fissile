@@ -166,7 +166,7 @@ func (roles Roles) Swap(i, j int) {
 }
 
 // LoadRoleManifest loads a yaml manifest that details how jobs get grouped into roles
-func LoadRoleManifest(manifestFilePath string, releases []*Release) (*RoleManifest, error) {
+func LoadRoleManifest(manifestFilePath string, releases []*Release, skipDev bool) (*RoleManifest, error) {
 	manifestContents, err := ioutil.ReadFile(manifestFilePath)
 	if err != nil {
 		return nil, err
@@ -208,12 +208,21 @@ func LoadRoleManifest(manifestFilePath string, releases []*Release) (*RoleManife
 		}
 
 		// Remove all roles that are not of the "bosh" or "bosh-task" type
+		// or have "dev-only" tag and skipDev is true
 		// Default type is considered to be "bosh"
-		switch role.Type {
-		case "":
+		if role.Type == "" {
 			role.Type = RoleTypeBosh
+		}
+
+		switch role.Type {
 		case RoleTypeBosh, RoleTypeBoshTask:
-			continue
+			if skipDev {
+				for _, tag := range role.Tags {
+					if strings.EqualFold(tag, "dev-only") {
+						rolesManifest.Roles = append(rolesManifest.Roles[:i], rolesManifest.Roles[i+1:]...)
+					}
+				}
+			}
 		case RoleTypeDocker:
 			rolesManifest.Roles = append(rolesManifest.Roles[:i], rolesManifest.Roles[i+1:]...)
 		default:

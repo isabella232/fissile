@@ -21,7 +21,7 @@ func TestLoadRoleManifestOK(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/tor-good.yml")
-	rolesManifest, err := LoadRoleManifest(roleManifestPath, []*Release{release})
+	rolesManifest, err := LoadRoleManifest(roleManifestPath, []*Release{release}, false)
 	assert.NoError(err)
 	assert.NotNil(rolesManifest)
 
@@ -53,7 +53,7 @@ func TestGetScriptPaths(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/tor-good.yml")
-	rolesManifest, err := LoadRoleManifest(roleManifestPath, []*Release{release})
+	rolesManifest, err := LoadRoleManifest(roleManifestPath, []*Release{release}, false)
 	assert.NoError(err)
 	assert.NotNil(rolesManifest)
 
@@ -76,7 +76,7 @@ func TestLoadRoleManifestNotOKBadJobName(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/tor-bad.yml")
-	_, err = LoadRoleManifest(roleManifestPath, []*Release{release})
+	_, err = LoadRoleManifest(roleManifestPath, []*Release{release}, false)
 	assert.NotNil(err)
 	assert.Contains(err.Error(), "Cannot find job foo in release")
 }
@@ -93,7 +93,7 @@ func TestLoadDuplicateReleases(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/tor-good.yml")
-	_, err = LoadRoleManifest(roleManifestPath, []*Release{release, release})
+	_, err = LoadRoleManifest(roleManifestPath, []*Release{release, release}, false)
 
 	assert.NotNil(err)
 	assert.Contains(err.Error(), "release tor has been loaded more than once")
@@ -116,7 +116,7 @@ func TestLoadRoleManifestMultipleReleasesOK(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/multiple-good.yml")
-	rolesManifest, err := LoadRoleManifest(roleManifestPath, []*Release{ntpRelease, torRelease})
+	rolesManifest, err := LoadRoleManifest(roleManifestPath, []*Release{ntpRelease, torRelease}, false)
 	assert.NoError(err)
 	assert.NotNil(rolesManifest)
 
@@ -151,7 +151,7 @@ func TestLoadRoleManifestMultipleReleasesNotOk(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/multiple-bad.yml")
-	_, err = LoadRoleManifest(roleManifestPath, []*Release{ntpRelease, torRelease})
+	_, err = LoadRoleManifest(roleManifestPath, []*Release{ntpRelease, torRelease}, false)
 
 	assert.NotNil(err)
 	assert.Contains(err.Error(), "release foo has not been loaded and is referenced by job ntpd in role foorole")
@@ -169,7 +169,27 @@ func TestNonBoshRolesAreIgnoredOK(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/non-bosh-roles.yml")
-	rolesManifest, err := LoadRoleManifest(roleManifestPath, []*Release{release})
+	rolesManifest, err := LoadRoleManifest(roleManifestPath, []*Release{release}, false)
+	assert.NoError(err)
+	assert.NotNil(rolesManifest)
+
+	assert.Equal(roleManifestPath, rolesManifest.manifestFilePath)
+	assert.Len(rolesManifest.Roles, 2)
+}
+
+func TestDevOnlyRolesAreIgnoredOK(t *testing.T) {
+	assert := assert.New(t)
+
+	workDir, err := os.Getwd()
+	assert.NoError(err)
+
+	torReleasePath := filepath.Join(workDir, "../test-assets/tor-boshrelease")
+	torReleasePathBoshCache := filepath.Join(torReleasePath, "bosh-cache")
+	release, err := NewDevRelease(torReleasePath, "", "", torReleasePathBoshCache)
+	assert.NoError(err)
+
+	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/dev-only-roles.yml")
+	rolesManifest, err := LoadRoleManifest(roleManifestPath, []*Release{release}, true)
 	assert.NoError(err)
 	assert.NotNil(rolesManifest)
 

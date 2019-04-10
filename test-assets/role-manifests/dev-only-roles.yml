@@ -1,0 +1,28 @@
+---
+roles:
+- name: myrole
+  scripts: ["myrole.sh"]
+  jobs:
+  - name: new_hostname
+    release_name: tor
+  - name: tor
+    release_name: tor
+- name: foorole
+  type: bosh-task
+  jobs:
+  - name: tor
+    release_name: tor
+- name: devrole1
+  tags: ["dev-only"]
+  scripts: ["myrole.sh"]
+  jobs:
+  - name: new_hostname
+    release_name: tor
+  - name: tor
+    release_name: tor
+- name: devrole2
+  type: bosh-task
+  tags: ["dev-only"]
+  jobs:
+  - name: tor
+    release_name: tor

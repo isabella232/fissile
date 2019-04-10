@@ -44,6 +44,7 @@ var buildKubeCmd = &cobra.Command{
 			flagBuildKubeDockerOrganization,
 			flagBuildKubeDefaultEnvFiles,
 			flagBuildKubeUseMemoryLimits,
+			flagReleaseBuild,
 		)
 
 	},
