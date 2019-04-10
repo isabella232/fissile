@@ -9,7 +9,7 @@ import (
 	"github.com/hpcloud/fissile/model"
 	"github.com/stretchr/testify/assert"
 	"k8s.io/client-go/pkg/api/resource"
-	"k8s.io/client-go/pkg/api/v1"
+	v1 "k8s.io/client-go/pkg/api/v1"
 	"k8s.io/client-go/pkg/util/intstr"
 )
 

@@ -6,7 +6,7 @@ import (
 	"github.com/hpcloud/fissile/model"
 	"k8s.io/client-go/pkg/api/resource"
 	meta "k8s.io/client-go/pkg/api/unversioned"
-	"k8s.io/client-go/pkg/api/v1"
+	v1 "k8s.io/client-go/pkg/api/v1"
 	v1beta1 "k8s.io/client-go/pkg/apis/apps/v1beta1"
 	"k8s.io/client-go/pkg/runtime"
 )
