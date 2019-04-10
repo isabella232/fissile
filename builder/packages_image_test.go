@@ -89,7 +89,7 @@ func TestNewDockerPopulator(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/tor-good.yml")
-	rolesManifest, err := model.LoadRoleManifest(roleManifestPath, []*model.Release{release})
+	rolesManifest, err := model.LoadRoleManifest(roleManifestPath, []*model.Release{release}, false)
 	assert.NoError(err)
 
 	packagesImageBuilder, err := NewPackagesImageBuilder("foo", compiledPackagesDir, targetPath, "3.14.15", ui)

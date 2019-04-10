@@ -67,7 +67,7 @@ func statefulSetTestLoadManifest(assert *assert.Assertions, manifestName string)
 	if !assert.NoError(err) {
 		return nil, nil
 	}
-	manifest, err := model.LoadRoleManifest(manifestPath, []*model.Release{release})
+	manifest, err := model.LoadRoleManifest(manifestPath, []*model.Release{release}, false)
 	if !assert.NoError(err) {
 		return nil, nil
 	}

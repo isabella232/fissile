@@ -44,7 +44,7 @@ func TestGenerateRoleImageDockerfile(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/tor-good.yml")
-	rolesManifest, err := model.LoadRoleManifest(roleManifestPath, []*model.Release{release})
+	rolesManifest, err := model.LoadRoleManifest(roleManifestPath, []*model.Release{release}, false)
 	assert.NoError(err)
 
 	torOpinionsDir := filepath.Join(workDir, "../test-assets/tor-opinions")
@@ -97,7 +97,7 @@ func TestGenerateRoleImageRunScript(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/tor-good.yml")
-	rolesManifest, err := model.LoadRoleManifest(roleManifestPath, []*model.Release{release})
+	rolesManifest, err := model.LoadRoleManifest(roleManifestPath, []*model.Release{release}, false)
 	assert.NoError(err)
 	torOpinionsDir := filepath.Join(workDir, "../test-assets/tor-opinions")
 	lightOpinionsPath := filepath.Join(torOpinionsDir, "opinions.yml")
@@ -151,7 +151,7 @@ func TestGenerateRoleImageJobsConfig(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/tor-good.yml")
-	rolesManifest, err := model.LoadRoleManifest(roleManifestPath, []*model.Release{release})
+	rolesManifest, err := model.LoadRoleManifest(roleManifestPath, []*model.Release{release}, false)
 	assert.NoError(err)
 
 	torOpinionsDir := filepath.Join(workDir, "../test-assets/tor-opinions")
@@ -200,7 +200,7 @@ func TestGenerateRoleImageDockerfileDir(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/tor-good.yml")
-	rolesManifest, err := model.LoadRoleManifest(roleManifestPath, []*model.Release{release})
+	rolesManifest, err := model.LoadRoleManifest(roleManifestPath, []*model.Release{release}, false)
 	assert.NoError(err)
 
 	torOpinionsDir := filepath.Join(workDir, "../test-assets/tor-opinions")
@@ -373,7 +373,7 @@ func TestBuildRoleImages(t *testing.T) {
 	assert.NoError(err)
 
 	roleManifestPath := filepath.Join(workDir, "../test-assets/role-manifests/tor-good.yml")
-	rolesManifest, err := model.LoadRoleManifest(roleManifestPath, []*model.Release{release})
+	rolesManifest, err := model.LoadRoleManifest(roleManifestPath, []*model.Release{release}, false)
 	assert.NoError(err)
 	torOpinionsDir := filepath.Join(workDir, "../test-assets/tor-opinions")
 	lightOpinionsPath := filepath.Join(torOpinionsDir, "opinions.yml")
