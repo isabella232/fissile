@@ -166,7 +166,7 @@ func init() {
 		"Choose output format, one of human, json, or yaml (currently only for 'show properties')",
 	)
 
-	buildImagesCmd.PersistentFlags().BoolP(
+	RootCmd.PersistentFlags().BoolP(
 		"release-build",
 		"R",
 		false,
